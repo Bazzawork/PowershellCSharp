@@ -18,4 +18,11 @@ Describe 'Lab 1: Return a random email' {
       $actual | Should -Not -Contain '.'
     }
   }
+  Context 'Get-PEURandonLetter' {
+    It 'Returns a random letter' {
+      $actual = Get-PEURandomLetter
+      $actual | Should -Not -BeNullOrEmpty
+      $actual | Should -Match '^[a-zA-Z]$'
+    }
+  }
 }

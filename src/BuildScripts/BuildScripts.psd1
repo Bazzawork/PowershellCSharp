@@ -78,7 +78,6 @@ CmdletsToExport = @(
     'Get-PEURandomDate'
     'Get-PEURandomSentence'
     'Write-PEURandomColorMessage'
-
 )
 
 # Variables to export from this module
