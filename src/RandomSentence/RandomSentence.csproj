@@ -14,5 +14,7 @@
     <PackageReference Include="Lorem.Universal.Net" Version="4.0.80" />
     <PackageReference Include="System.Management.Automation" Version="7.4.10" PrivateAssets="all" />
   </ItemGroup>
-
+  <Target Name="RemovePublishFolder" BeforeTargets="_CheckForUnsupportedTargetFramework">
+    <RemoveDir Directories="$(PublishDir)"></RemoveDir>
+  </Target>
 </Project>
