@@ -8,9 +8,9 @@ using LoremNET;
 public class GetCEPackerSentenceCmdlet : PSCmdlet
 {
     [Parameter(Position = 0, Mandatory = false)]
-    public int Min { get; set; } = 5;
+    public int Min { get; set; } = 10;
     [Parameter(Position = 1, Mandatory = false)]
-    public int Max { get; set; } = 10;
+    public int Max { get; set; } = 15;
     [Parameter(Position = 2, Mandatory = false, ValueFromPipeline = true)]
     public string? Name { get; set; } = null;
 

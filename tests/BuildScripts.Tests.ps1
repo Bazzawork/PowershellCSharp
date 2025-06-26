@@ -1,4 +1,4 @@
-Describe 'Lab 1: Return a random email' {
+Describe 'BuildScripts Tests' {
   BeforeAll {
     . $PSScriptRoot/Shared.ps1
     Initialize-TestEnvironment -ProjectName 'BuildScripts'
@@ -23,6 +23,13 @@ Describe 'Lab 1: Return a random email' {
       $actual = Get-PEURandomLetter
       $actual | Should -Not -BeNullOrEmpty
       $actual | Should -Match '^[a-zA-Z]$'
+    }
+  }
+  Context 'Get-CeTenableAgentGroup'{
+    It 'Returns a Tenable Agent Group' {
+      $actual = Get-CeTenableAgentGroup
+      $actual | Should -Not -BeNullOrEmpty
+
     }
   }
 }

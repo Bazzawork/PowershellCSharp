@@ -9,8 +9,8 @@ Describe 'Lab 2: Get a random sentence' {
       $actual | Should -Not -BeNullOrEmpty
 
       $words = ($actual -split ' ').Count
-      $words | Should -BeGreaterOrEqual 5
-      $words | Should -BeLessOrEqual 10
+      $words | Should -BeGreaterOrEqual 10
+      $words | Should -BeLessOrEqual 15
     }
     It 'Generates a sentence between -Min and -Max' {
       $actual = Get-CEPackerSentence -Min 50 -Max 150

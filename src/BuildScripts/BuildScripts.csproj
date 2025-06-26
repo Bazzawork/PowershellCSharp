@@ -14,4 +14,8 @@
     <PackageReference Include="System.Management.Automation" Version="7.4.10" PrivateAssets="all" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TenableApi\TenableApi.csproj" />
+  </ItemGroup>
+
 </Project>
