@@ -1,0 +1,77 @@
+  - stage: AddTagToBranch
+    variables:
+      - group: CloudEngBuildScript
+      - name: patch
+        value: $[counter(format('{0}-{1}', variables['releaseversion'], variables['Build.SourceBranchName']), 1)]
+
+    displayName: Add Tag to Branch
+    dependsOn: PesterTests
+    # condition: succeeded()
+    jobs:
+      - job: AddTagToBranch
+        displayName: Add Tag to Release
+        steps:
+          - task: 6d15af64-176c-496d-b583-fd2ae21d4df4@1
+            inputs:
+              repository: self
+              fetchDepth: 0
+              persistCredentials: true
+
+          - powershell: |
+              $sourceBranch = "$(system.pullRequest.sourceBranch)"
+              Write-Host "Source Branch: $sourceBranch"
+              $sourceBranchName = $sourceBranch.Split('/')[-1]
+              Write-Host "Source Branch Name: $sourceBranchName"
+              Write-Host "##vso[task.setvariable variable=sourceBranchName]$SourceBranchName"
+              Write-Host "Patch: $(patch)"
+              Write-Host "##vso[task.setvariable variable=branchversion]$(releaseversion)-$SourceBranchName"
+            displayName: Setting Version variables
+            name: firstStep
+            workingDirectory: $(build.sourcesDirectory)
+            failOnStderr: true
+            env:
+              WHO_IS_THE_BOSS: $(requesters_name)
+
+          # - task: git-tag-on-release-task@9
+          #   displayName: 'Add Tag to Branch'
+          #   inputs:
+          #     staticTagName: '$(sourceBranchName)'
+          - task: PowerShell@2
+            displayName: Finish feature
+            env:
+              AZURE_DEVOPS_EXT_PAT: $(System.AccessToken)
+            inputs:
+              targetType: inline
+              script: |
+                # git fetch --all
+                # $remote = git branch -r
+                # Write-Host 'Remote Branches: ($remote.count)'
+                # $remote
+                # Write-Host 'attempting to checkout origin/feature/$featureName'
+                # git checkout 'origin/feature/$featureName'
+
+                # Write-Host "Git Branch"
+                # git branch
+
+                # Write-Host "Git branch -r"
+                # git branch -r
+
+                # $source = "$(sourceBranchName)"
+                # Write-Host "Source: $source"
+
+                # $featureName = $source.Split('/')[-1]
+                # Write-Host "Feature Name $featureName"
+
+                # $sourceBranch = "feature/$featureName"
+                # Write-Host "Source Branch: $sourceBranch"
+                $requested 
+                Write-Host "----- List PR details"
+                $prDetails = az repos pr list --source-branch $(system.pullRequest.sourceBranch) | ConvertFrom-Json
+                Write-Host "Configuration stuff"
+                Write-Host "----- UserName $($prDetails.createdBy.displayName)"
+                git config --global user.email $prDetails.createdBy.displayName
+                git config --global user.name $prDetails.createdBy.uniqueName
+                git tag -a -f $(sourceBranchName) -m "Name: $($prDetails.createdBy.displayName) Title: $($prDetails.title)"
+                git push origin $(sourceBranchName) --force
+                az repos pr update --id $(System.PullRequest.PullRequestId) --auto-complete true --delete-source-branch true --transition-work-items true
+
